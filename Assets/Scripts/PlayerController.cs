@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
     private float speed = 5f;
-  
+    [SerializeField]
     private float turnSpeed = 10f;
 
     public Rigidbody rb;
