@@ -11,9 +11,11 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody rb;
     public float jumpAmount = 10;
+    Animator anim;
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -33,6 +35,16 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(Vector3.up * jumpAmount, ForceMode.Impulse);
+        }
+
+        if (Input.GetKey("W"))
+        {
+            anim.SetBool("move", true);
+        }
+
+        if (!Input.GetKey("W"))
+        {
+            anim.SetBool("move", false);
         }
     }
 }

@@ -6,6 +6,11 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+
+    private static readonly int ToWalkHash = Animator.StringToHash("ToWalk");
+    private static readonly int ToRunHash = Animator.StringToHash("ToRun");
+    private static readonly int ToAttackHash = Animator.StringToHash("ToAttack");
+
     [SerializeField] private Transform player;
 
     private NavMeshAgent _agent;
@@ -31,9 +36,12 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float upAttackForce = 15f;
     [SerializeField] private float forwardAttackForce = 18f;
 
+    Animator anim;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>();
+
     }
 
     private void Start()
@@ -45,6 +53,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
+  
         Vector3 pos = transform.position;
         playerInVisionRange = Physics.CheckSphere(pos, visionRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(pos, attackRange, playerLayer);
@@ -68,9 +77,10 @@ public class EnemyAI : MonoBehaviour
 
     private void Patrol()
     {
-        if (Vector3.Distance(transform.position,
-            waypoints[nextPoint].position) < 2.5f)
+        if (Vector3.Distance(transform.position,waypoints[nextPoint].position) < 2.5f)
         {
+            anim.SetBool(ToWalkHash, true);
+
             nextPoint++;
             if (nextPoint == totalWaypoints)
             {
@@ -83,6 +93,8 @@ public class EnemyAI : MonoBehaviour
 
     private void Chase()
     {
+        anim.SetBool(ToRunHash, true);
+
         _agent.SetDestination(player.position);
         transform.LookAt(player);
     }
@@ -90,6 +102,8 @@ public class EnemyAI : MonoBehaviour
     private void Attack()
     {
         _agent.SetDestination(transform.position);
+        anim.SetTrigger(ToAttackHash);
+
         if (canAttack)
         {
             Debug.Log("attack");
