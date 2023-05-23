@@ -31,7 +31,7 @@ public class EnemyAI : MonoBehaviour
     // Ataque
     [SerializeField] private GameObject bullet;
     [SerializeField] private Transform spawnPoint;
-    private float timeBetweenAttacks = 2f;
+    private float timeBetweenAttacks = 5f;
     private bool canAttack;
     [SerializeField] private float upAttackForce = 15f;
     [SerializeField] private float forwardAttackForce = 18f;
@@ -107,12 +107,6 @@ public class EnemyAI : MonoBehaviour
         if (canAttack)
         {
             Debug.Log("attack");
-            Rigidbody rigidbody = Instantiate(bullet, spawnPoint.position,
-                Quaternion.identity).GetComponent<Rigidbody>();
-            rigidbody.AddForce(transform.forward * forwardAttackForce,
-                ForceMode.Impulse);
-            rigidbody.AddForce(transform.up * upAttackForce, ForceMode.Impulse);
-
             canAttack = false;
             StartCoroutine(AttackCooldown());
         }
