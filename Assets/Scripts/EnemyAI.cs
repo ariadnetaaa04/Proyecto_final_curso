@@ -29,12 +29,11 @@ public class EnemyAI : MonoBehaviour
     private int nextPoint;
 
     // Ataque
-    [SerializeField] private GameObject bullet;
+    
     [SerializeField] private Transform spawnPoint;
     private float timeBetweenAttacks = 5f;
     private bool canAttack;
-    [SerializeField] private float upAttackForce = 15f;
-    [SerializeField] private float forwardAttackForce = 18f;
+    
 
     Animator anim;
     private void Awake()

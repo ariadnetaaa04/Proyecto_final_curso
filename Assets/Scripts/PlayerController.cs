@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,9 +14,21 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public float jumpAmount = 10;
     Animator anim;
+
+    private int score; //canva
+    private int plusPoints = 10;
+
+    public TMP_Text scoreText;
+    public TMP_Text GameOverText;
+    private bool GameOver;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
+        GameOver = false;
+        score = 0;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
     }
@@ -37,14 +51,33 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpAmount, ForceMode.Impulse);
         }
 
-        if (Input.GetKey("W"))
+        if (horizontalInput == 1)
         {
             anim.SetBool("move", true);
         }
 
-        if (!Input.GetKey("W"))
+        if (horizontalInput == 1)
         {
             anim.SetBool("move", false);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Coin"))
+        {
+            // La moneda ha sido recolectada por el jugador
+            // Aquí puedes agregar el código para aumentar la puntuación del jugador, por ejemplo.
+            score++;
+            Debug.Log("Points: " + score);
+            // Destruir la moneda
+            Destroy(gameObject.CompareTag("Coin"));
+        }
+    }
+
+    private void UpdateScore()
+    {
+        //The variable that represents the text and its text string. "The text" + the variable of the points 
+        scoreText.text = "Coins: " + score;
     }
 }
