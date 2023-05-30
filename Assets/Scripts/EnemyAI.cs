@@ -18,8 +18,8 @@ public class EnemyAI : MonoBehaviour
     private float visionRange = 3f;
     private float attackRange = 1.5f;
 
-    private bool playerInVisionRange;
-    private bool playerInAttackRange;
+    [SerializeField] private bool playerInVisionRange;
+    [SerializeField] private bool playerInAttackRange;
 
     [SerializeField] private LayerMask playerLayer;
 
@@ -33,20 +33,29 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     private float timeBetweenAttacks = 5f;
     private bool canAttack;
-    
+    Player_life lifePlayer;
+    public int quantity;
+    public float damageTime;
+    float currentDamageTime;
+
+    //game over
+    PlayerController playerController;
+
 
     Animator anim;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
+        lifePlayer = GameObject.FindWithTag("Player").GetComponent<Player_life>();
+        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
     }
 
     private void Start()
     {
         totalWaypoints = waypoints.Length;
-        nextPoint = 1;
+        nextPoint = 0;
         canAttack = true;
     }
 
@@ -92,6 +101,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Chase()
     {
+        Debug.Log("Chase");
         anim.SetBool(ToRunHash, true);
 
         _agent.SetDestination(player.position);
@@ -105,8 +115,19 @@ public class EnemyAI : MonoBehaviour
 
         if (canAttack)
         {
-            Debug.Log("attack");
+            currentDamageTime += Time.deltaTime;
+            if (currentDamageTime > damageTime)
+            {
+                lifePlayer.life += quantity;
+                currentDamageTime = 0.0f;
+            }
+            
+            if (lifePlayer.currentHealth <= 0f)
+            {
+                lifePlayer.Die();
+            }
             canAttack = false;
+            
             StartCoroutine(AttackCooldown());
         }
     }

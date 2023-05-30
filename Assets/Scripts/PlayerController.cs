@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
 
     public TMP_Text scoreText;
     public TMP_Text GameOverText;
+    public TMP_Text VictoryText;
     private bool GameOver;
 
 
@@ -28,7 +29,11 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         GameOver = false;
-        score = 0;
+        score=0; 
+        GameOverText.gameObject.SetActive(false);
+        //Calling the function so the score for the canva gets updated
+        UpdateScore();
+
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
     }
@@ -44,7 +49,6 @@ public class PlayerController : MonoBehaviour
         
         transform.Translate(Vector3.right * turnSpeed * Time.deltaTime * horizontalInput);
 
-        //transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime * horizontalInput);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -66,12 +70,15 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Coin"))
         {
-            // La moneda ha sido recolectada por el jugador
-            // Aquí puedes agregar el código para aumentar la puntuación del jugador, por ejemplo.
             score++;
-            Debug.Log("Points: " + score);
-            // Destruir la moneda
-            Destroy(gameObject.CompareTag("Coin"));
+            UpdateScore();
+
+            Destroy(other.gameObject);
+        }
+
+        if (other.CompareTag("End"))
+        {
+            Victory();
         }
     }
 
@@ -79,5 +86,11 @@ public class PlayerController : MonoBehaviour
     {
         //The variable that represents the text and its text string. "The text" + the variable of the points 
         scoreText.text = "Coins: " + score;
+    }
+
+    private void Victory()
+    {
+        VictoryText.gameObject.SetActive(true);
+        GameOver = true;
     }
 }
