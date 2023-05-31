@@ -7,6 +7,9 @@ TagManager:
   - floor
   - enemy
   - Coin
+  - Ground
+  - End
+  - arm
   layers:
   - Default
   - TransparentFX

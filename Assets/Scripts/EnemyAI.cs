@@ -18,8 +18,8 @@ public class EnemyAI : MonoBehaviour
     private float visionRange = 3f;
     private float attackRange = 1.5f;
 
-    [SerializeField] private bool playerInVisionRange;
-    [SerializeField] private bool playerInAttackRange;
+    private bool playerInVisionRange;
+    private bool playerInAttackRange;
 
     [SerializeField] private LayerMask playerLayer;
 
@@ -29,14 +29,14 @@ public class EnemyAI : MonoBehaviour
     private int nextPoint;
 
     // Ataque
-    
-    [SerializeField] private Transform spawnPoint;
-    private float timeBetweenAttacks = 5f;
+   
+    private float timeBetweenAttacks = 50f;
     private bool canAttack;
     Player_life lifePlayer;
     public int quantity;
     public float damageTime;
     float currentDamageTime;
+    Manipulador_vida manipulador;
 
     //game over
     PlayerController playerController;
@@ -115,17 +115,6 @@ public class EnemyAI : MonoBehaviour
 
         if (canAttack)
         {
-            currentDamageTime += Time.deltaTime;
-            if (currentDamageTime > damageTime)
-            {
-                lifePlayer.life += quantity;
-                currentDamageTime = 0.0f;
-            }
-            
-            if (lifePlayer.currentHealth <= 0f)
-            {
-                lifePlayer.Die();
-            }
             canAttack = false;
             
             StartCoroutine(AttackCooldown());
@@ -147,5 +136,18 @@ public class EnemyAI : MonoBehaviour
         // Esfera de ataque
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            currentDamageTime += Time.deltaTime;
+            if (currentDamageTime > damageTime)
+            {
+                Attack();
+                currentDamageTime = 0.0f;
+            }
+        }
     }
 }

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float speed = 5f;
-    [SerializeField]
-    private float turnSpeed = 10f;
+    public float moveSpeed = 5f;
+    public float rotationSpeed = 1.5f;
 
     public Rigidbody rb;
-    public float jumpAmount = 10;
+    public float jumpForce = 8f;
+    private bool isJumping = false;
     Animator anim;
 
     private int score; //canva
@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     public TMP_Text VictoryText;
     private bool GameOver;
 
+    private AudioSource audioSource;
+
 
 
     // Start is called before the first frame update
@@ -31,38 +33,53 @@ public class PlayerController : MonoBehaviour
         GameOver = false;
         score=0; 
         GameOverText.gameObject.SetActive(false);
+        VictoryText.gameObject.SetActive(false);
         //Calling the function so the score for the canva gets updated
         UpdateScore();
 
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+
+        //para confinarlo en la pantalla durante el juego
+        Cursor.lockState = CursorLockMode.Confined;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        //Manual forward movement
-        transform.Translate(Vector3.forward * speed * Time.deltaTime * verticalInput);
-        //Manual lateral movement
+       
+        float moveInput = Input.GetAxis("Vertical");
+        transform.Translate(Vector3.forward * moveInput * moveSpeed * Time.deltaTime);
+
         
-        transform.Translate(Vector3.right * turnSpeed * Time.deltaTime * horizontalInput);
+        float rotationInput = Input.GetAxis("Mouse X");
+        transform.Rotate(Vector3.up * rotationInput * rotationSpeed * Time.deltaTime);
 
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !isJumping)
         {
-            rb.AddForce(Vector3.up * jumpAmount, ForceMode.Impulse);
+            Jump();
         }
 
-        if (horizontalInput == 1)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            anim.SetBool("move", true);
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("Options");
         }
+    }
 
-        if (horizontalInput == 1)
+    private void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        isJumping = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
         {
-            anim.SetBool("move", false);
+            isJumping = false;
         }
     }
 
@@ -72,7 +89,7 @@ public class PlayerController : MonoBehaviour
         {
             score++;
             UpdateScore();
-
+            audioSource.Play();
             Destroy(other.gameObject);
         }
 
@@ -91,6 +108,7 @@ public class PlayerController : MonoBehaviour
     private void Victory()
     {
         VictoryText.gameObject.SetActive(true);
+        Time.timeScale = 0;
         GameOver = true;
     }
 }
