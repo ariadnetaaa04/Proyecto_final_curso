@@ -38,6 +38,7 @@ void Update()
     public void Die()
     {
         GameOverText.gameObject.SetActive(true);
+        barraDeVida.gameObject.SetActive(false);
         GameOver = true;
     }
 

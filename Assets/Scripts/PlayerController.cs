@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private static readonly int ToWalkHash = Animator.StringToHash("ToWalk");
+
 
 
     // Start is called before the first frame update
@@ -44,6 +46,8 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
 
         audioSource = GetComponent<AudioSource>();
+
+        
     }
 
     // Update is called once per frame

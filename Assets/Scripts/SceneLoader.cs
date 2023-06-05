@@ -8,6 +8,7 @@ public class SceneLoader : MonoBehaviour
     public string Game;
     public string Options;
     public string MainMenu;
+    public string Controls;
 
     public void LoadGame()
     {
@@ -21,5 +22,9 @@ public class SceneLoader : MonoBehaviour
     public void LoadMenu()
     {
         SceneManager.LoadScene(MainMenu);
+    }
+    public void LoadControls()
+    {
+        SceneManager.LoadScene(Control);
     }
 }
