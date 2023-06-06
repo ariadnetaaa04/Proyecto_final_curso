@@ -25,6 +25,11 @@ public class SceneLoader : MonoBehaviour
     }
     public void LoadControls()
     {
-        SceneManager.LoadScene(Control);
+        SceneManager.LoadScene(Controls);
+    }
+
+    public void Resume()
+    {
+        Time.timeScale = 1f;
     }
 }
