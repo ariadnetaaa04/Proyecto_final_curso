@@ -35869,6 +35869,9 @@ MonoBehaviour:
   scoreText: {fileID: 903075623}
   GameOverText: {fileID: 2129507843}
   VictoryText: {fileID: 1731163887}
+  victoryAudioClip: {fileID: 8300000, guid: 08c886f643c286b42807cec94f988ea0, type: 3}
+  deathAudioClip: {fileID: 0}
+  coinAudioClip: {fileID: 8300000, guid: 8b3dca1d3d99c08408692ab667642429, type: 3}
 --- !u!4 &961046538
 Transform:
   m_ObjectHideFlags: 0
@@ -35903,6 +35906,7 @@ MonoBehaviour:
   GameOverText: {fileID: 2129507843}
   quantity: -10
   damageTime: 0.25
+  deathAudioClip: {fileID: 8300000, guid: 3a331368806034c4f83e5bec7434aa6d, type: 3}
 --- !u!82 &961046541
 AudioSource:
   m_ObjectHideFlags: 0
@@ -35913,7 +35917,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 44d1e5f9c47d43c48abeb30dcf4d0e85, type: 3}
+  m_audioClip: {fileID: 8300000, guid: baedf07a2362da7449d0d89bcb9965e9, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

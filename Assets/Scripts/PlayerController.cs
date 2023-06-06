@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     public TMP_Text VictoryText;
     private bool GameOver;
 
+    public AudioClip victoryAudioClip; // El clip de audio que se reproducirá al morir
+    public AudioClip deathAudioClip;
+    public AudioClip coinAudioClip;
     private AudioSource audioSource;
 
     private static readonly int ToWalkHash = Animator.StringToHash("ToWalk");
@@ -38,6 +41,7 @@ public class PlayerController : MonoBehaviour
         VictoryText.gameObject.SetActive(false);
         //Calling the function so the score for the canva gets updated
         UpdateScore();
+        audioSource.Play();
 
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
@@ -94,7 +98,7 @@ public class PlayerController : MonoBehaviour
         {
             score++;
             UpdateScore();
-            audioSource.Play();
+            audioSource.PlayOneShot(coinAudioClip);
             Destroy(other.gameObject);
         }
 
@@ -115,5 +119,9 @@ public class PlayerController : MonoBehaviour
         VictoryText.gameObject.SetActive(true);
         Time.timeScale = 0;
         GameOver = true;
+        audioSource.PlayOneShot(victoryAudioClip);
     }
+
+    
 }
+

@@ -16,10 +16,15 @@ public class Player_life : MonoBehaviour
     public float damageTime;
     float currentDamageTime;
 
+    public AudioClip deathAudioClip;
+    private AudioSource audioSource;
+
     private void Start()
     {
         GameOver = false;
         currentHealth = life;
+
+        audioSource = GetComponent<AudioSource>();
     }
 void Update()
     {
@@ -32,15 +37,12 @@ void Update()
             }
     }
     
-            
-       
-
     public void Die()
     {
         GameOverText.gameObject.SetActive(true);
         barraDeVida.gameObject.SetActive(false);
         GameOver = true;
+        audioSource.PlayOneShot(deathAudioClip);
     }
 
-    
 }
