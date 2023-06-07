@@ -30,7 +30,7 @@ public class EnemyAI : MonoBehaviour
 
     // Ataque
    
-    private float timeBetweenAttacks = 50f;
+    private float timeBetweenAttacks = 250f;
     private bool canAttack;
     Player_life lifePlayer;
     public int quantity;

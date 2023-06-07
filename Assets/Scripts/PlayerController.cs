@@ -24,9 +24,10 @@ public class PlayerController : MonoBehaviour
     private bool GameOver;
 
     public AudioClip victoryAudioClip; // El clip de audio que se reproducirá al morir
-    public AudioClip deathAudioClip;
     public AudioClip coinAudioClip;
-    private AudioSource audioSource;
+    private AudioSource _audioSource;
+
+    GameManager GM;
 
     private static readonly int ToWalkHash = Animator.StringToHash("ToWalk");
 
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour
         VictoryText.gameObject.SetActive(false);
         //Calling the function so the score for the canva gets updated
         UpdateScore();
-        audioSource.Play();
+        
 
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
@@ -49,7 +50,7 @@ public class PlayerController : MonoBehaviour
         //para confinarlo en la pantalla durante el juego
         Cursor.lockState = CursorLockMode.Confined;
 
-        audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
 
         
     }
@@ -72,9 +73,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            SceneManager.LoadScene("Options");
+            GM.SaveGame();
             Cursor.lockState = CursorLockMode.None;
             Time.timeScale = 0f;
-            SceneManager.LoadScene("Options");
+            
         }
     }
 
@@ -98,7 +101,8 @@ public class PlayerController : MonoBehaviour
         {
             score++;
             UpdateScore();
-            audioSource.PlayOneShot(coinAudioClip);
+            
+            _audioSource.PlayOneShot(coinAudioClip, 1.0f);
             Destroy(other.gameObject);
         }
 
@@ -119,7 +123,7 @@ public class PlayerController : MonoBehaviour
         VictoryText.gameObject.SetActive(true);
         Time.timeScale = 0;
         GameOver = true;
-        audioSource.PlayOneShot(victoryAudioClip);
+        _audioSource.PlayOneShot(victoryAudioClip, 1.0f);
     }
 
     
